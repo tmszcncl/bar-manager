@@ -16,3 +16,9 @@
 
 @import "materialize";
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+body {
+  background: #7474BF;
+  background: -webkit-linear-gradient(to left, #7474BF , #348AC7);
+  background: linear-gradient(to left, #7474BF , #348AC7);
+}

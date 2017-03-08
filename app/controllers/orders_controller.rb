@@ -37,6 +37,10 @@ class OrdersController < ApplicationController
     end
   end
 
+  def queued
+    @orders = Order.where(step: 'queued')
+  end
+
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
