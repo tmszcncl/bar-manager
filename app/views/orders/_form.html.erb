@@ -1,22 +1,13 @@
-<%= form_for(order) do |f| %>
-  <% if order.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
+<%= form_for(@order) do |f| %>
 
-      <ul>
-      <% order.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+    <%= f.fields_for :order_items do |ff| %>
+      <%= ff.text_field :product_id %>
+    <% end %>
 
-  <div class="field">
-    <%= f.label :step %>
-    <%= f.text_field :step %>
-  </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Add New Item', class: 'btn' %>
+    <%= f.submit 'Transfer to Kitchen', class: 'btn blue' %>
+    <%= f.submit 'Cancel', class: 'btn red' %>
   </div>
 <% end %>
