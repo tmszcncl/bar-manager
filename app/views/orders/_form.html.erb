@@ -1,14 +1,21 @@
 <%= form_for(@order) do |f| %>
 
-    <div class="container input-field col s12">
-      <%= f.fields_for :order_items do |ff| %>
-          <%= ff.collection_select :product_id, Product.all, :id, :name, include_blank: true %>
-      <% end %>
-    </div>
+
+    <%= f.fields_for :order_items do |ff| %>
+        <div class="row">
+          <div class="col s8 input-field">
+            <%= ff.collection_select :product_id, Product.all, :id, :name, include_blank: true %>
+          </div>
+          <div class="col s4 input-field">
+            <%= ff.text_field :order_id %>
+          </div>
+        </div>
+    <% end %>
+
 
     <div class="actions">
-      <%= f.submit 'Add New Item', class: 'btn' %>
-      <%= f.submit 'Transfer to Kitchen', class: 'btn blue' %>
-      <%= f.submit 'Cancel', class: 'btn red' %>
+      <%= f.submit 'Add New Item', class: 'btn-large' %>
+      <%= f.submit 'Transfer to Kitchen', class: 'btn-large blue' %>
+      <%= f.submit 'Cancel', class: 'btn-large red' %>
     </div>
 <% end %>
