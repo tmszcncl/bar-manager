@@ -1,20 +1,20 @@
 <%= form_for(@order) do |f| %>
 
-
     <%= f.fields_for :order_items do |ff| %>
         <div class="row">
-          <div class="col s8 input-field">
+          <div class="col s10 input-field">
             <%= ff.collection_select :product_id, Product.all, :id, :name, include_blank: true %>
           </div>
-          <div class="col s4 input-field">
-            <%= ff.text_field :order_id %>
+          <div class="col s2 input-field">
+            <%= ff.number_field :quantity %>
           </div>
         </div>
     <% end %>
 
+    <h2><%= "Total Price: #{ @order.total_price }" if @order.persisted? %></h2>
 
     <div class="actions">
-      <%= f.submit 'Add New Item', class: 'btn-large' %>
+      <%= f.submit 'Add New Item', class: 'btn-large', name: 'add_new_item' %>
       <%= f.submit 'Transfer to Kitchen', class: 'btn-large blue' %>
       <%= f.submit 'Cancel', class: 'btn-large red' %>
     </div>
