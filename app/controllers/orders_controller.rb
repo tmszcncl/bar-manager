@@ -16,7 +16,7 @@ class OrdersController < ApplicationController
 
   def create
     @order = Order.new(order_params)
-    @order.remove_zero_order_items
+    @order.remove_invalid_order_items
     if params[:add_new_item]
       @order.save
       redirect_to edit_order_path(@order)
@@ -28,8 +28,18 @@ class OrdersController < ApplicationController
   end
 
   def update
-    @order.remove_zero_order_items
-    if params[:add_new_item] && @order.update(order_params)
+    @order.remove_invalid_order_items
+    atts = order_params["order_items_attributes"]
+    zombies = atts.select { |_, v| v['quantity'].to_i.zero? && !v['product_id'].blank? }
+    if zombies
+      zombies = zombies.map { |_, v| v[:id] }
+      zombies.each { |z| OrderItem.find(z).delete }
+    end
+    new_order_params = order_params.dup
+    new_order_params['order_items_attributes'].delete_if do |_, v|
+      v['quantity'].to_i.zero? || v['product_id'].to_i.zero?
+    end
+    if params[:add_new_item] && @order.update(new_order_params)
       redirect_to edit_order_path(@order)
     end
   end

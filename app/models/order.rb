@@ -11,8 +11,10 @@ class Order < ApplicationRecord
                .map { |item| item.product.price * item.quantity }.inject(:+)
   end
 
-  def remove_zero_order_items
-    self.order_items = order_items.reject { |x| x.quantity.zero? }
+  def remove_invalid_order_items
+    self.order_items = order_items.each do |x|
+      x.delete if x.quantity.zero? || x.product_id.nil?
+    end
   end
 
 end
