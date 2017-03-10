@@ -24,6 +24,7 @@ class OrdersController < ApplicationController
     if params[:commit] == 'Transfer to Kitchen'
       @order.step = 'queued'
       @order.save
+      ActionCable.server.broadcast 'notification_channel', info: 'Order sent to Kitchen'
       redirect_to new_order_path
     end
   end
