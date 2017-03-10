@@ -21,6 +21,11 @@ class OrdersController < ApplicationController
       @order.save
       redirect_to edit_order_path(@order)
     end
+    if params[:commit] == 'Transfer to Kitchen'
+      @order.step = 'queued'
+      @order.save
+      redirect_to new_order_path
+    end
   end
 
   def queued
@@ -29,18 +34,19 @@ class OrdersController < ApplicationController
 
   def update
     @order.remove_invalid_order_items
-    atts = order_params["order_items_attributes"]
-    zombies = atts.select { |_, v| v['quantity'].to_i.zero? && !v['product_id'].blank? }
-    if zombies
-      zombies = zombies.map { |_, v| v[:id] }
-      zombies.each { |z| OrderItem.find(z).delete }
-    end
+    remove_zombie_order_items
     new_order_params = order_params.dup
     new_order_params['order_items_attributes'].delete_if do |_, v|
       v['quantity'].to_i.zero? || v['product_id'].to_i.zero?
     end
-    if params[:add_new_item] && @order.update(new_order_params)
+    if params[:add_new_item]
+      @order.update(new_order_params)
       redirect_to edit_order_path(@order)
+    end
+    if params[:commit] == 'Transfer to Kitchen'
+      @order.step = 'queued'
+      @order.update(new_order_params)
+      redirect_to new_order_path
     end
   end
 
@@ -61,5 +67,14 @@ class OrdersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
     params.require(:order).permit(:step, order_items_attributes: [:id, :product_id, :order_id, :quantity])
+  end
+
+  def remove_zombie_order_items
+    atts = order_params['order_items_attributes']
+    zombies = atts.select { |_, v| v['quantity'].to_i.zero? && !v['product_id'].blank? }
+    if zombies
+      zombies = zombies.map { |_, v| v[:id] }
+      zombies.each { |z| OrderItem.find(z).delete }
+    end
   end
 end
