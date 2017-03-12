@@ -2,9 +2,20 @@
   <div class="col s12">
     <ul class="tabs tabs-fixed-width">
       <li class="tab"><%= link_to 'New', new_order_path, target:'_self', class: ('active' if params[:action] == 'new') %></li>
-      <li class="tab"><%= link_to 'Queued', queued_orders_path, target:'_self', class: ('active' if params[:action] == 'queued') %></li>
-      <li class="tab"><%= link_to 'In Progress', in_progress_orders_path, target:'_self', class: ('active' if params[:action] == 'in_progress') %></li>
-      <li class="tab"><%= link_to 'Ready', ready_orders_path, target:'_self', class: ('active' if params[:action] == 'ready') %></li>
+      <li class="tab"><%= link_to "Queued #{ Order.queued.count if Order.queued.count > 0 } ",
+                                  queued_orders_path,
+                                  target:'_self',
+                                  class: ('active' if params[:action] == 'queued') %>
+      </li>
+      <li class="tab"><%= link_to "In Progress #{ Order.in_progress.count if Order.in_progress.count > 0 }", in_progress_orders_path,
+                                  target:'_self',
+                                  class: ('active' if params[:action] == 'in_progress') %>
+      </li>
+      <li class="tab"><%= link_to "Ready #{ Order.ready.count if Order.ready.count > 0 }",
+                                  ready_orders_path,
+                                  target:'_self',
+                                  class: ('active' if params[:action] == 'ready') %>
+      </li>
       <li class="tab"><%= link_to 'Released', released_orders_path, target:'_self', class: ('active' if params[:action] == 'released') %></li>
     </ul>
   </div>
