@@ -24,19 +24,19 @@ class OrdersController < ApplicationController
   end
 
   def queued
-    @orders = Order.queued
+    render_queue Order.queued
   end
 
   def in_progress
-    @orders = Order.in_progress
+    render_queue Order.in_progress
   end
 
   def ready
-    @orders = Order.ready
+    render_queue Order.ready
   end
 
   def released
-    @orders = Order.released
+    render_queue Order.released
   end
 
   def update
@@ -126,4 +126,8 @@ class OrdersController < ApplicationController
     redirect_to edit_order_path(@order)
   end
 
+  def render_queue(orders)
+    @orders = orders
+    render template: "orders/queued"
+  end
 end
