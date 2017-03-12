@@ -1,5 +1,5 @@
 class Order < ApplicationRecord
-  has_many :order_items, inverse_of: :order
+  has_many :order_items, inverse_of: :order, dependent: :destroy
   accepts_nested_attributes_for :order_items,
                                 reject_if: lambda { |attributes| attributes['product_id'].blank? },
                                 reject_if: lambda { |attributes| attributes['quantity'] == 0 }

@@ -20,6 +20,7 @@ class OrdersController < ApplicationController
     @order.remove_invalid_order_items
     add_new_item_from_create if params[:add_new_item]
     transfer_to_kitchen_from_create if params[:transfer_to_kitchen]
+    destroy if params[:delete_order]
   end
 
   def queued
@@ -33,19 +34,20 @@ class OrdersController < ApplicationController
 
     add_new_item_from_update(new_order_params) if params[:add_new_item]
     transfer_to_kitchen_from_update(new_order_params) if params[:transfer_to_kitchen]
+    destroy if params[:delete_order]
   end
 
   def destroy
     @order.destroy
-    respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to new_order_path if params[:action] == 'edit'
+    redirect_to :back
   end
 
   private
   def set_order
     @order = Order.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to new_order_path
   end
 
   def set_products
@@ -103,5 +105,10 @@ class OrdersController < ApplicationController
   def add_new_item_from_update(new_order_params)
     @order.update(new_order_params)
     redirect_to edit_order_path(@order)
+  end
+
+  def delete_order_from_create
+    @order.destroy
+    redirect_to new_order_path
   end
 end
