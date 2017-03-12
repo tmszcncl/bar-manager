@@ -18,9 +18,8 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     @order.remove_invalid_order_items
-
     add_new_item_from_create if params[:add_new_item]
-    transfer_to_kitchen_from_create if params[:commit] == 'Transfer to Kitchen'
+    transfer_to_kitchen_from_create if params[:transfer_to_kitchen]
   end
 
   def queued
@@ -33,7 +32,7 @@ class OrdersController < ApplicationController
     new_order_params = clean_order_params
 
     add_new_item_from_update(new_order_params) if params[:add_new_item]
-    transfer_to_kitchen_from_update(new_order_params) if params[:commit] == 'Transfer to Kitchen'
+    transfer_to_kitchen_from_update(new_order_params) if params[:transfer_to_kitchen]
   end
 
   def destroy
@@ -54,7 +53,16 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:step, order_items_attributes: [:id, :product_id, :order_id, :quantity])
+    params.require(:order)
+          .permit(:step,
+                  order_items_attributes: [
+                    :id,
+                    :product_id,
+                    :order_id,
+                    :quantity,
+                    :transfer_to_kitchen,
+                    :add_new_item
+                  ])
   end
 
   def remove_zombie_order_items
