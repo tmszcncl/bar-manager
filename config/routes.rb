@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       get 'ready'
       get 'released'
     end
+    member do
+      post 'next_step', to: 'orders#next_step'
+    end
   end
   resources :products
 

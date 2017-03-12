@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :next_step]
   before_action :set_products, only: [:new, :edit, :update]
 
   def index
@@ -27,6 +27,18 @@ class OrdersController < ApplicationController
     @orders = Order.where(step: 'queued')
   end
 
+  def in_progress
+    @orders = Order.where(step: 'in_progress')
+  end
+
+  def ready
+    @orders = Order.where(step: 'ready')
+  end
+
+  def released
+    @orders = Order.where(step: 'released')
+  end
+
   def update
     @order.remove_invalid_order_items
     remove_zombie_order_items
@@ -40,6 +52,13 @@ class OrdersController < ApplicationController
   def destroy
     @order.destroy
     redirect_to new_order_path if params[:action] == 'edit'
+    redirect_to :back
+  end
+
+  def next_step
+    current_index = Order::STEPS.index(@order.step)
+    @order.step = Order::STEPS[current_index + 1]
+    @order.save
     redirect_to :back
   end
 
@@ -107,8 +126,4 @@ class OrdersController < ApplicationController
     redirect_to edit_order_path(@order)
   end
 
-  def delete_order_from_create
-    @order.destroy
-    redirect_to new_order_path
-  end
 end
