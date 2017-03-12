@@ -24,19 +24,19 @@ class OrdersController < ApplicationController
   end
 
   def queued
-    @orders = Order.where(step: 'queued')
+    @orders = Order.queued
   end
 
   def in_progress
-    @orders = Order.where(step: 'in_progress')
+    @orders = Order.in_progress
   end
 
   def ready
-    @orders = Order.where(step: 'ready')
+    @orders = Order.ready
   end
 
   def released
-    @orders = Order.where(step: 'released')
+    @orders = Order.released
   end
 
   def update
