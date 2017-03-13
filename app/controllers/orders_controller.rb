@@ -106,8 +106,7 @@ class OrdersController < ApplicationController
   def transfer_to_kitchen_from_create
     @order.step = 'queued'
     @order.save
-    binding.pry
-    NotificationService.call "Order #{@order.id} sent to Kitchen", 15_000, 'red'
+    notify
     redirect_to new_order_path
   end
 
@@ -119,6 +118,7 @@ class OrdersController < ApplicationController
   def transfer_to_kitchen_from_update(new_order_params)
     @order.step = 'queued'
     @order.update(new_order_params)
+    notify
     redirect_to new_order_path
   end
 
@@ -130,5 +130,14 @@ class OrdersController < ApplicationController
   def render_queue(orders)
     @orders = orders
     render template: 'orders/queue'
+  end
+
+  def notify
+    new_order_notification if params[:action] == 'create'
+    new_order_notification if params[:action] == 'update'
+  end
+
+  def new_order_notification
+    NotificationService.call "Order #{@order.id} sent to Kitchen", 15_000, 'red'
   end
 end
