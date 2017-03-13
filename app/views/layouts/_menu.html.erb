@@ -1,22 +1,23 @@
-<div class="row">
-  <div class="col s12">
-    <ul class="tabs tabs-fixed-width">
-      <li class="tab"><%= link_to 'New', new_order_path, target:'_self', class: ('active' if params[:action] == 'new') %></li>
-      <li class="tab"><%= link_to "Queued #{ Order.queued.count if Order.queued.count > 0 } ",
-                                  queued_orders_path,
-                                  target:'_self',
-                                  class: ('active' if params[:action] == 'queued') %>
+<nav class="top-nav">
+  <div class="nav-wrapper grey">
+    <a href="#!" class="brand-logo center">Bar Manager</a>
+    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul class="left hide-on-med-and-down">
+      <li class="<%= 'active' if params[:action] == 'new' %>" >
+        <%= link_to 'New', root_path, target: '_self', class: ('active' if params[:action] == 'new') %>
       </li>
-      <li class="tab"><%= link_to "In Progress #{ Order.in_progress.count if Order.in_progress.count > 0 }", in_progress_orders_path,
-                                  target:'_self',
-                                  class: ('active' if params[:action] == 'in_progress') %>
+      <li class="<%= 'active' if params[:action] == 'queued' %>" >
+        <%= link_to "Queued #{ Order.queued.count if Order.queued.count > 0 }", queued_orders_path %>
       </li>
-      <li class="tab"><%= link_to "Ready #{ Order.ready.count if Order.ready.count > 0 }",
-                                  ready_orders_path,
-                                  target:'_self',
-                                  class: ('active' if params[:action] == 'ready') %>
+      <li class="<%= 'active' if params[:action] == 'in_progress' %>" >
+        <%= link_to "In Progress #{ Order.in_progress.count if Order.in_progress.count > 0 }", in_progress_orders_path %>
       </li>
-      <li class="tab"><%= link_to 'Released', released_orders_path, target:'_self', class: ('active' if params[:action] == 'released') %></li>
+      <li class="<%= 'active' if params[:action] == 'ready' %>" >
+        <%= link_to "Ready #{ Order.ready.count if Order.ready.count > 0 }", ready_orders_path %>
+      </li>
+      <li class="<%= 'active' if params[:action] == 'released' %>" >
+        <%= link_to 'Released', released_orders_path %>
+      </li>
     </ul>
   </div>
-</div>
+</nav>
