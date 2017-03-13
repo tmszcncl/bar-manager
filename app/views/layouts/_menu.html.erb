@@ -7,13 +7,16 @@
         <%= link_to 'New', root_path, target: '_self', class: ('active' if params[:action] == 'new') %>
       </li>
       <li class="<%= 'active' if params[:action] == 'queued' %>" >
-        <%= link_to "Queued #{ Order.queued.count if Order.queued.count > 0 }", queued_orders_path %>
+        <a href='/orders/queued'>Queued<span class="badge red white-text">
+          <%= Order.queued.count if Order.queued.count > 0 %></span></a>
       </li>
       <li class="<%= 'active' if params[:action] == 'in_progress' %>" >
-        <%= link_to "In Progress #{ Order.in_progress.count if Order.in_progress.count > 0 }", in_progress_orders_path %>
+        <a href='/orders/in_progress'>In Progress<span class="badge orange white-text">
+          <%= Order.in_progress.count if Order.in_progress.count > 0 %></span></a>
       </li>
       <li class="<%= 'active' if params[:action] == 'ready' %>" >
-        <%= link_to "Ready #{ Order.ready.count if Order.ready.count > 0 }", ready_orders_path %>
+        <a href='/orders/ready'>Ready<span class="badge green white-text">
+          <%= Order.ready.count if Order.ready.count > 0 %></span></a>
       </li>
       <li class="<%= 'active' if params[:action] == 'released' %>" >
         <%= link_to 'Released', released_orders_path %>
