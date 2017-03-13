@@ -6,7 +6,7 @@
             <%= ff.collection_select :product_id, @products, :id, :name, include_blank: true %>
           </div>
           <div class="col s2 input-field">
-            <%= ff.number_field :quantity %>
+            <%= ff.number_field :quantity, min:0 %>
           </div>
         </div>
     <% end %>

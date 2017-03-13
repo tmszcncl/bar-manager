@@ -9,10 +9,12 @@
                     <p><%= order_item.quantity %>x <%= order_item.product.name %></p>
                 <% end %>
               </div>
-              <div class="card-action">
-                <%= link_to 'Next Step', next_step_order_path(order), method: :post %>
-                <%= link_to 'Delete Order', order, method: :delete, class: 'right' %>
-              </div>
+              <% unless order.step == 'released' %>
+                  <div class="card-action">
+                    <%= link_to 'Next Step', next_step_order_path(order), method: :post %>
+                    <%= link_to 'Delete Order', order, method: :delete, class: 'right' %>
+                  </div>
+              <% end %>
             </div>
           </div>
         </div>
