@@ -59,6 +59,7 @@ class OrdersController < ApplicationController
     current_index = Order::STEPS.index(@order.step)
     @order.step = Order::STEPS[current_index + 1]
     @order.save
+    notify
     redirect_to :back
   end
 
@@ -133,11 +134,21 @@ class OrdersController < ApplicationController
   end
 
   def notify
-    new_order_notification if params[:action] == 'create'
-    new_order_notification if params[:action] == 'update'
+    action = params[:action]
+    new_order_notification if action == 'create' || params[:action] == 'update'
+    order_in_progress_notification if action == 'next_step' && @order.next_step?('ready')
+    order_ready_notification if action == 'next_step' && @order.next_step?('released')
   end
 
   def new_order_notification
     NotificationService.call "Order #{@order.id} sent to Kitchen", 15_000, 'red'
+  end
+
+  def order_in_progress_notification
+    NotificationService.call "Order #{@order.id} in Progress", 5_000, 'orange'
+  end
+
+  def order_ready_notification
+    NotificationService.call "Order #{@order.id} Ready", 10_000, 'green'
   end
 end
