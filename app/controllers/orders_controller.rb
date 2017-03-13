@@ -106,7 +106,8 @@ class OrdersController < ApplicationController
   def transfer_to_kitchen_from_create
     @order.step = 'queued'
     @order.save
-    NotificationService.call "Order #{@order.id} sent to Kitchen"
+    binding.pry
+    NotificationService.call "Order #{@order.id} sent to Kitchen", 15_000, 'red'
     redirect_to new_order_path
   end
 
