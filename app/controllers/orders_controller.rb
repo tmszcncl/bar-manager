@@ -106,7 +106,7 @@ class OrdersController < ApplicationController
   def transfer_to_kitchen_from_create
     @order.step = 'queued'
     @order.save
-    ActionCable.server.broadcast 'notification_channel', info: 'Order sent to Kitchen'
+    NotificationService.call "Order #{@order.id} sent to Kitchen"
     redirect_to new_order_path
   end
 
@@ -128,6 +128,6 @@ class OrdersController < ApplicationController
 
   def render_queue(orders)
     @orders = orders
-    render template: "orders/queued"
+    render template: 'orders/queue'
   end
 end

@@ -3,5 +3,5 @@ App.notification = App.cable.subscriptions.create "NotificationChannel",
 
   disconnected: ->
 
-  received: (info) ->
-    Materialize.toast(info.info, 5000, 'red')
+  received: (data) ->
+    Materialize.toast(data.message)
