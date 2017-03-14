@@ -1,26 +1,13 @@
 <nav class="top-nav">
   <div class="nav-wrapper grey">
-    <a href="#!" class="brand-logo center">Bar Manager</a>
+    <%= link_to 'Bar Manager', root_path, class: 'brand-logo center', target: '_self' %>
     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul class="left hide-on-med-and-down">
-      <li class="<%= 'active' if params[:action] == 'new' %>" >
-        <%= link_to 'New', root_path, target: '_self', class: ('active' if params[:action] == 'new') %>
-      </li>
-      <li class="<%= 'active' if params[:action] == 'queued' %>" >
-        <a href='/orders/queued'>Queued<span class="badge red white-text">
-          <%= Order.queued.count if Order.queued.count > 0 %></span></a>
-      </li>
-      <li class="<%= 'active' if params[:action] == 'in_progress' %>" >
-        <a href='/orders/in_progress'>In Progress<span class="badge orange white-text">
-          <%= Order.in_progress.count if Order.in_progress.count > 0 %></span></a>
-      </li>
-      <li class="<%= 'active' if params[:action] == 'ready' %>" >
-        <a href='/orders/ready'>Ready<span class="badge green white-text">
-          <%= Order.ready.count if Order.ready.count > 0 %></span></a>
-      </li>
-      <li class="<%= 'active' if params[:action] == 'released' %>" >
-        <%= link_to 'Released', released_orders_path %>
-      </li>
+      <%= render partial: 'layouts/menu_item', locals: menu_item_new %>
+      <%= render partial: 'layouts/menu_item_with_badge', locals: menu_item_queued if Order.queued.count > 0 %>
+      <%= render partial: 'layouts/menu_item_with_badge', locals: menu_item_in_progress if Order.in_progress.count > 0 %>
+      <%= render partial: 'layouts/menu_item_with_badge', locals: menu_item_ready if Order.ready.count > 0 %>
+      <%= render partial: 'layouts/menu_item', locals: menu_item_released %>
     </ul>
   </div>
 </nav>

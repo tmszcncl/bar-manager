@@ -1,0 +1,3 @@
+<li class="<%= 'active' if params[:action] == action %>" >
+  <%= link_to link_name, link_path, target: '_self', class: ('active' if params[:action] == action) %>
+</li>
